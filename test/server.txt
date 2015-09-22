@@ -1,0 +1,45 @@
+var express     =    require("express");
+var multer      =    require('multer');
+var app         =    express();
+var exec        =    require('child_process').exec;
+var fs          =    require('fs');
+var done        =    false;
+var newname     =    "";
+
+app.use(multer({ dest: './uploads/',
+ rename: function (fieldname, filename) {
+  newname = filename+Date.now()
+    return filename+Date.now();
+  },
+onFileUploadStart: function (file) {
+  console.log(file.originalname + ' is starting ...')
+},
+onFileUploadComplete: function (file) {
+  console.log(file.fieldname + ' uploaded to  ' + file.path)
+  done=true;
+}
+}));
+
+app.get('/',function(req,res){
+      res.sendfile("index.html");
+});
+
+
+app.post('/wc',[
+  multer({ dest: './uploads/' }),
+  function(req, res){
+    if(done==true){
+    console.log(req.files);
+    res.end("File uploaded.");
+  }
+    fs.readFile('./uploads//'+newname+'.txt','utf8', function(err,data){
+      if(err) {
+        return console.log(err);
+      }
+      console.log(data);
+    });
+}]);
+
+app.listen(3000,function(){
+    console.log("Working on port 3000");
+});

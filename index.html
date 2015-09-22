@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BackOffice ESRV Tool</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style type="text/css">
+    body{
+      padding-top: 70px;
+    }
+</style>
+</head>
+<body>
+<nav id="myNavbar" class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="container">
+    <div class="navbar-header">
+      <a href = "https://go.sap.com/index.html">
+        <img src="http://www.sap.com/global/images/SAPLogo.gif">
+      </a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="nav navbar-nav">
+        <a class="navbar-brand" href="/">ESRV Tool </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="jumbotron">
+    <h2><strong>Instructions</strong></h2>
+    <p>
+      <ul>
+        <li> This application is designed for TQMs to convert the ESRV planning spreadsheet to a format that can be easily entered into CRM.
+          In order for the application to execute without error, the following items need to be true:</li>
+      <ol>
+        <li> The data must be maintained in a sheet called "Engagement Plan" and that sheet must be formatted following the attached
+          <a href="\\usphlvmagsfs\custsupp\CoE_Overall\BO_Team_3\99_ESRV_Conversion_Tool\template.xlsm" download="template.xlsm">template</a>.</li>
+        <li> The start date of the week (typically Monday) needs to be defined in Row 2 at the top of the spreadsheet in order for the dates in the output to be correct.</li>
+        <li>In order for the program to recognize a resource is being engaged, there must be a number in the cell for the corresponding week.
+          In the case that TQM days are being used, the value of that cell should be 0 (zero).</li>
+      </ol>
+        <li> Note that the output times are all in EST. When entering the data in CRM, make sure you use the EST timezone.
+          When you save the data it will be converted to the timezone you have maintained in CRM.</li>
+        <li> In case of issues with the tool, please contact the inbox: <a href="mailto:coe_backoffice_team_3@exchange.sap.corp?Subject=Question about ESRV Conversion Tool" target="_top">
+          SAP CoE Backoffice Team 3</a> for questions.</li>
+      </ul>
+    </p>
+  </div>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-xs-6">
+      <form id="uploadForm"
+         enctype="multipart/form-data"
+         action="/upload"
+         method="post">
+            <div class="col-xs-50">
+                <div class="input-group">
+                    <input type="file"
+                          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.ms-excel.template.macroEnabled.12,application/vnd.ms-excel.addin.macroEnabled.12"
+                          class="form-control"
+                          placeholder="Choose a File"
+                          name='thefile'>
+                    <span class="input-group-btn">
+                        <input type="submit" value="Upload" name="submit" class="btn btn-default">
+                    </span>
+                </div>
+            </div>
+
+      </form>
+    <hr>
+    <form>
+    </div>
+  </div>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js">
+  $(document).ready(function() {
+
+     $('#uploadForm').submit(function() {
+
+        $(this).ajaxSubmit({
+
+            error: function(xhr) {
+                    status('Error: ' + xhr.status);
+            },
+
+            success: function(response) {
+                      console.log(response);
+            }
+    });
+        //Very important line, it disable the page refresh.
+    return false;
+    });
+});
+  </script>
+
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <footer>
+        <p>&copy; Copyright 2015 SAP America Inc. Backoffice Team 3</p>
+      </footer>
+    </div>
+  </div>
+</div>
+</body>
+</html>
